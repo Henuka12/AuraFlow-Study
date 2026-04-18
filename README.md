@@ -138,13 +138,37 @@ cd Study.app
 npm install
 ```
 
-### 3. Configure environment variables
+### 3. Set up Firebase (for the comments feature)
+
+The collaborative comments panel requires a Firebase project with Cloud Firestore enabled.
+
+**a. Create a Firebase project**
+
+1. Go to [console.firebase.google.com](https://console.firebase.google.com) and create a new project.
+2. Inside the project, open **Firestore Database** and click **Create database**.
+3. Choose a region close to you and start in **Test mode** (allows open read/write).
+4. Once created, go to **Rules** and replace the default with:
+
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /comments/{doc} {
+      allow read, write: if true;
+    }
+  }
+}
+```
+
+Click **Publish**.
+
+**b. Add your credentials**
 
 ```bash
 cp .env.example .env.local
 ```
 
-Open `.env.local` and fill in your Firebase project credentials:
+Open `.env.local` and fill in the values from your Firebase project settings (**Project settings → Your apps → Web app → SDK setup and configuration**):
 
 ```
 VITE_FIREBASE_API_KEY=...
@@ -155,7 +179,7 @@ VITE_FIREBASE_MESSAGING_SENDER_ID=...
 VITE_FIREBASE_APP_ID=...
 ```
 
-> The app runs without Firebase (comments panel will be inactive), but you will see console warnings without valid credentials.
+> The app runs without Firebase credentials (all features except comments will work), but you will see console warnings and the comments panel will be inactive.
 
 ### 4. Run in development mode
 
@@ -304,4 +328,3 @@ Project: [https://github.com/Henuka12/Study.app](https://github.com/Henuka12/Stu
 ---
 
 *Built with care for focus, flow, and simplicity.*
-
